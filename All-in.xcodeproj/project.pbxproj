@@ -11,6 +11,10 @@
 		F48AA25D2A61D72E003F7BDE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48AA25C2A61D72E003F7BDE /* ContentView.swift */; };
 		F48AA25F2A61D730003F7BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F48AA25E2A61D730003F7BDE /* Assets.xcassets */; };
 		F48AA2622A61D730003F7BDE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F48AA2612A61D730003F7BDE /* Preview Assets.xcassets */; };
+		F4E86DBB2A61DBA500B2E940 /* Color+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E86DBA2A61DBA500B2E940 /* Color+extension.swift */; };
+		F4E86DC02A61DDC100B2E940 /* AvenirNextLTPro-It.otf in Resources */ = {isa = PBXBuildFile; fileRef = F4E86DBD2A61DDC100B2E940 /* AvenirNextLTPro-It.otf */; };
+		F4E86DC12A61DDC100B2E940 /* AvenirNextLTPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F4E86DBE2A61DDC100B2E940 /* AvenirNextLTPro-Regular.otf */; };
+		F4E86DC22A61DDC100B2E940 /* AvenirNextLTPro-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F4E86DBF2A61DDC100B2E940 /* AvenirNextLTPro-Bold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,11 @@
 		F48AA25C2A61D72E003F7BDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F48AA25E2A61D730003F7BDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F48AA2612A61D730003F7BDE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F4E86DBA2A61DBA500B2E940 /* Color+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+extension.swift"; sourceTree = "<group>"; };
+		F4E86DBD2A61DDC100B2E940 /* AvenirNextLTPro-It.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AvenirNextLTPro-It.otf"; sourceTree = "<group>"; };
+		F4E86DBE2A61DDC100B2E940 /* AvenirNextLTPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AvenirNextLTPro-Regular.otf"; sourceTree = "<group>"; };
+		F4E86DBF2A61DDC100B2E940 /* AvenirNextLTPro-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AvenirNextLTPro-Bold.otf"; sourceTree = "<group>"; };
+		F4E86DC32A61DEF900B2E940 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +60,11 @@
 		F48AA2592A61D72E003F7BDE /* All-in */ = {
 			isa = PBXGroup;
 			children = (
+				F4E86DC32A61DEF900B2E940 /* Info.plist */,
+				F4E86DBC2A61DDA600B2E940 /* Fonts */,
 				F48AA25A2A61D72E003F7BDE /* All_inApp.swift */,
 				F48AA25C2A61D72E003F7BDE /* ContentView.swift */,
+				F4E86DB92A61DB8B00B2E940 /* Extensions */,
 				F48AA25E2A61D730003F7BDE /* Assets.xcassets */,
 				F48AA2602A61D730003F7BDE /* Preview Content */,
 			);
@@ -65,6 +77,24 @@
 				F48AA2612A61D730003F7BDE /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F4E86DB92A61DB8B00B2E940 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F4E86DBA2A61DBA500B2E940 /* Color+extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F4E86DBC2A61DDA600B2E940 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F4E86DBF2A61DDC100B2E940 /* AvenirNextLTPro-Bold.otf */,
+				F4E86DBD2A61DDC100B2E940 /* AvenirNextLTPro-It.otf */,
+				F4E86DBE2A61DDC100B2E940 /* AvenirNextLTPro-Regular.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +157,9 @@
 			files = (
 				F48AA2622A61D730003F7BDE /* Preview Assets.xcassets in Resources */,
 				F48AA25F2A61D730003F7BDE /* Assets.xcassets in Resources */,
+				F4E86DC12A61DDC100B2E940 /* AvenirNextLTPro-Regular.otf in Resources */,
+				F4E86DC22A61DDC100B2E940 /* AvenirNextLTPro-Bold.otf in Resources */,
+				F4E86DC02A61DDC100B2E940 /* AvenirNextLTPro-It.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F48AA25D2A61D72E003F7BDE /* ContentView.swift in Sources */,
+				F4E86DBB2A61DBA500B2E940 /* Color+extension.swift in Sources */,
 				F48AA25B2A61D72E003F7BDE /* All_inApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,6 +304,7 @@
 				DEVELOPMENT_TEAM = UQGXLABK35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "All-in/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +334,7 @@
 				DEVELOPMENT_TEAM = UQGXLABK35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "All-in/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
