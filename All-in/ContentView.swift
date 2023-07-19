@@ -7,34 +7,59 @@
 
 import SwiftUI
 
-var endTime = 4
+var seasonsToLongPause = 4
+
+enum ClockState: Int {
+    case working = 10
+    case shortPause = 5
+    case longPause = 7
+}
 
 struct ContentView: View {
-    @State var currentTime = endTime {
+    @State var currentTime = ClockState.working.rawValue {
         didSet {
             withAnimation(.linear) {
-                percentProgress = CGFloat(currentTime) / CGFloat(endTime)
+                percentProgress = CGFloat(currentTime) / CGFloat(clockState.rawValue)
             }
         }
     }
     @State var percentProgress: CGFloat = 0
     @State var timerIsActive = false
     @State var season = 0
+    @State var timer: Timer?
+    @State var clockState: ClockState = .working
+    
     
     func startTimer() {
-        withAnimation{
+        withAnimation {
             timerIsActive = true
-            currentTime = endTime
-            season += 1
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                self.timer = timer
                 currentTime -= 1
-                if currentTime == 0 {
+                if currentTime == -1 {
                     timerIsActive = false
                     timer.invalidate()
+                    
+                    if clockState == .working && season < seasonsToLongPause - 1 {
+                        clockState = .shortPause
+                    } else if clockState == .working {
+                        clockState = .longPause
+                    } else {
+                        season = season == seasonsToLongPause - 1 ? 0 : season + 1
+                        clockState = .working
+                    }
+                    currentTime = clockState.rawValue
                 }
             }
         }
     }
+    
+    func pauseTimer() {
+        timerIsActive = false
+        timer?.invalidate()
+    }
+    
+    
     var body: some View {
         GeometryReader { proxy in
             VStack {
@@ -45,44 +70,21 @@ struct ContentView: View {
                     .padding(.bottom, 48)
                 
                 /// Task
-                Button {
-                    print("say hi!")
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 36)
-                            .fill(Color.purpleLight)
-                            .frame(height: 72)
-                        HStack {
-                            Text("Task: Write an article")
-                                .foregroundColor(Color.white)
-                                .font(Font.custom("AvenirNextLTPro-Light", size: 22))
-                            Spacer()
-                            Image(systemName: "pencil.line")
-                                .font(.system(size: 22))
-                        }.foregroundColor(Color.white)
-                            .padding(.horizontal)
-                        
-                    }
-                }
-                .padding(.bottom, 36)
+                TaskInput()
                 
                 /// Count
                 ZStack {
                     Circle()
                         .trim(from: 0, to: percentProgress)
-                        .stroke(Color.greyDark, lineWidth: 120)
-                        .frame(width: proxy.size.width - 150)
+                        .stroke(Color.purpleLight.opacity(0.2), lineWidth: 120)
+                        .frame(width: proxy.size.width - 140)
                         .rotationEffect(.degrees(-90))
-                        .blur(radius: 8)
+                        .blur(radius: 12)
                         
-                    Circle()
-                        .trim(from: 0, to: percentProgress)
-                        .stroke(Color.blueMain, lineWidth: 10)
-                        .padding(42)
-                        .rotationEffect(.degrees(-90))
                     Circle()
                         .fill(Color.purpleDark)
                         .shadow(color: .blueMain.opacity(0.4), radius: 16)
+                        .frame(width: proxy.size.width - 100)
                         .padding(48)
                         
                         .overlay {
@@ -90,6 +92,26 @@ struct ContentView: View {
                                 .foregroundColor(Color.white.opacity(0.8))
                                 .font(Font.custom("AvenirNextLTPro-Regular", size: 64))
                         }
+                    Circle()
+                        .trim(from: 0, to: percentProgress)
+                        .stroke(Color.blueMain, lineWidth: 10)
+                        .frame(width: proxy.size.width - 100)
+                        .rotationEffect(.degrees(-90))
+                    VStack {
+                        Circle()
+                            .fill(Color.blueMain)
+                            .frame(width: 32)
+                            .shadow(radius: 12)
+                            .overlay {
+                                Circle()
+                                    .fill(Color.white)
+                                    .padding(6)
+                            }
+                            .offset(y: -(proxy.size.width - 100) / 2)
+                        }
+                        .frame(width: proxy.size.width - 100, height: proxy.size.width - 100)
+                    .rotationEffect(.degrees(percentProgress * 360))
+
                 }
                 .padding(16)
                 .padding(.bottom, 20)
@@ -97,7 +119,7 @@ struct ContentView: View {
                 ProgressCircle(season: season)
                 
                 Button {
-                    startTimer()
+                    timerIsActive ? pauseTimer() : startTimer()
                 } label: {
                     Circle()
                         .fill(Color.blueMain)
@@ -110,11 +132,10 @@ struct ContentView: View {
                         
                 }
             }
-            
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+            .padding()
+            .background(Color.purpleDark)
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
-        .padding()
-        .background(Color.purpleDark)
     }
 }
 
@@ -176,6 +197,30 @@ struct ProgressCircle: View {
     }
 }
 
+struct TaskInput: View {
+    var body: some View {
+        Button {
+            print("say hi!")
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 36)
+                    .fill(Color.purpleLight)
+                    .frame(height: 72)
+                HStack {
+                    Text("Task: Write an article")
+                        .foregroundColor(Color.white)
+                        .font(Font.custom("AvenirNextLTPro-Light", size: 22))
+                    Spacer()
+                    Image(systemName: "pencil.line")
+                        .font(.system(size: 22))
+                }.foregroundColor(Color.white)
+                    .padding(.horizontal)
+                
+            }
+        }
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().previewDevice("iPhone 14 Pro Max")
@@ -189,5 +234,6 @@ struct ContentView_Previews: PreviewProvider {
 ///     - Extract component status
 /// - Build the menu
 /// - Build configuration screen
-///  - Build the task title preferences
-///  - Add songs
+/// - Build the task title preferences
+/// - Add songs
+/// - Add conicGradient animated on clock activated
