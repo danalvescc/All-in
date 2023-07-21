@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		F45EA9372A66DAF90002D6B9 /* Int+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45EA9362A66DAF90002D6B9 /* Int+extension.swift */; };
+		F46C74472A6A16B100F3874A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46C74462A6A16B100F3874A /* Settings.swift */; };
+		F46C744A2A6A171300F3874A /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46C74492A6A171300F3874A /* AppSettings.swift */; };
 		F48AA25B2A61D72E003F7BDE /* All_inApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48AA25A2A61D72E003F7BDE /* All_inApp.swift */; };
 		F48AA25D2A61D72E003F7BDE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48AA25C2A61D72E003F7BDE /* ContentView.swift */; };
 		F48AA25F2A61D730003F7BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F48AA25E2A61D730003F7BDE /* Assets.xcassets */; };
@@ -19,10 +21,15 @@
 		F4FFBF582A68724000311107 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF572A68724000311107 /* TimerView.swift */; };
 		F4FFBF5B2A687ECB00311107 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF5A2A687ECB00311107 /* SettingsView.swift */; };
 		F4FFBF5D2A6880EF00311107 /* UITabBarController+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF5C2A6880EF00311107 /* UITabBarController+extension.swift */; };
+		F4FFBF632A697E9B00311107 /* Dropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF622A697E9B00311107 /* Dropdown.swift */; };
+		F4FFBF652A69F91A00311107 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF642A69F91A00311107 /* RoundedCorner.swift */; };
+		F4FFBF672A69F93800311107 /* View+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FFBF662A69F93800311107 /* View+extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F45EA9362A66DAF90002D6B9 /* Int+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+extension.swift"; sourceTree = "<group>"; };
+		F46C74462A6A16B100F3874A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		F46C74492A6A171300F3874A /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F48AA2572A61D72E003F7BDE /* All-in.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "All-in.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F48AA25A2A61D72E003F7BDE /* All_inApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = All_inApp.swift; sourceTree = "<group>"; };
 		F48AA25C2A61D72E003F7BDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -36,6 +43,9 @@
 		F4FFBF572A68724000311107 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		F4FFBF5A2A687ECB00311107 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F4FFBF5C2A6880EF00311107 /* UITabBarController+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+extension.swift"; sourceTree = "<group>"; };
+		F4FFBF622A697E9B00311107 /* Dropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dropdown.swift; sourceTree = "<group>"; };
+		F4FFBF642A69F91A00311107 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
+		F4FFBF662A69F93800311107 /* View+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +59,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F46C74452A6A169F00F3874A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F46C74462A6A16B100F3874A /* Settings.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		F46C74482A6A170600F3874A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F46C74492A6A171300F3874A /* AppSettings.swift */,
+			);
+			name = ViewModel;
+			sourceTree = "<group>";
+		};
 		F48AA24E2A61D72E003F7BDE = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +94,8 @@
 		F48AA2592A61D72E003F7BDE /* All-in */ = {
 			isa = PBXGroup;
 			children = (
+				F46C74482A6A170600F3874A /* ViewModel */,
+				F46C74452A6A169F00F3874A /* Model */,
 				F4FFBF532A6871F600311107 /* View */,
 				F4E86DBC2A61DDA600B2E940 /* Fonts */,
 				F4E86DC32A61DEF900B2E940 /* Info.plist */,
@@ -94,6 +122,7 @@
 				F4E86DBA2A61DBA500B2E940 /* Color+extension.swift */,
 				F45EA9362A66DAF90002D6B9 /* Int+extension.swift */,
 				F4FFBF5C2A6880EF00311107 /* UITabBarController+extension.swift */,
+				F4FFBF662A69F93800311107 /* View+extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -111,6 +140,7 @@
 		F4FFBF532A6871F600311107 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F4FFBF612A697E8400311107 /* Shared */,
 				F4FFBF542A6871FE00311107 /* Screen */,
 			);
 			name = View;
@@ -139,6 +169,15 @@
 				F4FFBF5A2A687ECB00311107 /* SettingsView.swift */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		F4FFBF612A697E8400311107 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F4FFBF622A697E9B00311107 /* Dropdown.swift */,
+				F4FFBF642A69F91A00311107 /* RoundedCorner.swift */,
+			);
+			name = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,11 +254,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4FFBF582A68724000311107 /* TimerView.swift in Sources */,
+				F4FFBF632A697E9B00311107 /* Dropdown.swift in Sources */,
+				F46C744A2A6A171300F3874A /* AppSettings.swift in Sources */,
+				F4FFBF652A69F91A00311107 /* RoundedCorner.swift in Sources */,
 				F48AA25D2A61D72E003F7BDE /* ContentView.swift in Sources */,
 				F45EA9372A66DAF90002D6B9 /* Int+extension.swift in Sources */,
 				F4FFBF5B2A687ECB00311107 /* SettingsView.swift in Sources */,
+				F4FFBF672A69F93800311107 /* View+extension.swift in Sources */,
 				F4E86DBB2A61DBA500B2E940 /* Color+extension.swift in Sources */,
 				F48AA25B2A61D72E003F7BDE /* All_inApp.swift in Sources */,
+				F46C74472A6A16B100F3874A /* Settings.swift in Sources */,
 				F4FFBF5D2A6880EF00311107 /* UITabBarController+extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

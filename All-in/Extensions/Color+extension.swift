@@ -12,4 +12,5 @@ extension Color {
     static let blueMain = Color("Blue")
     static let purpleLight = Color("PurpleLight")
     static let greyDark = Color("GreyDark")
+    static let greyLight = Color("GreyLight")
 }

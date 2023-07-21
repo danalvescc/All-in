@@ -16,8 +16,9 @@ enum ClockState: Int {
 }
 
 struct TimerView: View {
+    @EnvironmentObject var appSettings: AppSettings
     @State var clockState: ClockState = .working
-    @State var currentTime = ClockState.working.rawValue {
+    @State var currentTime = 0 {
         didSet {
             withAnimation(.linear(duration: 1)) {
                 percentProgress = CGFloat(currentTime) / CGFloat(clockState.rawValue)
@@ -42,13 +43,15 @@ struct TimerView: View {
                     
                     if clockState == .working && season < seasonsToLongPause - 1 {
                         clockState = .shortPause
+                        currentTime = appSettings.shortBreak * 60
                     } else if clockState == .working {
                         clockState = .longPause
+                        currentTime = appSettings.longBreak * 60
                     } else {
                         season = season == seasonsToLongPause - 1 ? 0 : season + 1
                         clockState = .working
+                        currentTime = appSettings.focuse * 60
                     }
-                    currentTime = clockState.rawValue
                 }
             }
         }
@@ -143,6 +146,12 @@ struct TimerView: View {
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
             .padding()
             .background(Color.purpleDark)
+            .onAppear {
+                if !timerIsActive {
+                    currentTime = appSettings.focuse * 60
+                }
+                    
+            }
         }
     }
 }
@@ -164,7 +173,7 @@ struct ProgressCircle: View {
         }
     
     let offCircle: some View = Circle()
-        .fill(Color.gray)
+        .fill(Color.greyDark)
         .frame(width: 16)
     
     struct PositionCircle: View {
@@ -185,7 +194,7 @@ struct ProgressCircle: View {
     var body: some View {
         ZStack(alignment: .leading) {
             Rectangle()
-                .fill(Color.gray)
+                .fill(Color.greyDark)
                 .frame(width: 120, height: 1)
                 .overlay(alignment: .leading) {
                     Rectangle()
@@ -231,5 +240,6 @@ struct TaskInput: View {
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().previewDevice("iPhone 14 Pro Max")
+            .environmentObject(AppSettings())
     }
 }

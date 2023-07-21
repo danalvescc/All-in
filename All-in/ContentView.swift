@@ -9,6 +9,8 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @ObservedObject var appSettings = AppSettings()
+    
     var body: some View {
         TabView() {
             TimerView()
@@ -20,6 +22,7 @@ struct ContentView: View {
                     Image(systemName: "slider.vertical.3")
                 }
         }.accentColor(.blueMain)
+            .environmentObject(appSettings)
     }
 }
 
