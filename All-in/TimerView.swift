@@ -16,12 +16,23 @@ enum ClockState: Int {
 }
 
 struct TimerView: View {
-    @EnvironmentObject var appSettings: AppSettings
-    @State var clockState: ClockState = .working
+    @State var currentEndTime = 0
+    @State var clockState: ClockState = .working {
+        didSet {
+            switch(clockState) {
+            case .working:
+                currentEndTime = focuseTimeMemory * 60
+            case .shortPause:
+                currentEndTime = shortBreakTimeMemory * 60
+            case .longPause:
+                currentEndTime = longBreakTimeMemory * 60
+            }
+        }
+    }
     @State var currentTime = 0 {
         didSet {
             withAnimation(.linear(duration: 1)) {
-                percentProgress = CGFloat(currentTime) / CGFloat(clockState.rawValue)
+                percentProgress = CGFloat(currentTime) / CGFloat(currentEndTime)
             }
         }
     }
@@ -29,6 +40,11 @@ struct TimerView: View {
     @State var timerIsActive = false
     @State var season = 0
     @State var timer: Timer?
+    
+    @AppStorage("focuseTime") private var focuseTimeMemory = 25
+    @AppStorage("shortBreakTime") private var shortBreakTimeMemory = 5
+    @AppStorage("longBreakTime") private var longBreakTimeMemory = 15
+    @AppStorage("sectionsToPause") private var sectionsToPauseMemory = 4
     
     
     func startTimer() {
@@ -43,14 +59,14 @@ struct TimerView: View {
                     
                     if clockState == .working && season < seasonsToLongPause - 1 {
                         clockState = .shortPause
-                        currentTime = appSettings.shortBreak * 60
+                        currentTime = shortBreakTimeMemory * 60
                     } else if clockState == .working {
                         clockState = .longPause
-                        currentTime = appSettings.longBreak * 60
+                        currentTime = longBreakTimeMemory * 60
                     } else {
-                        season = season == seasonsToLongPause - 1 ? 0 : season + 1
+                        season = season == sectionsToPauseMemory - 1 ? 0 : season + 1
                         clockState = .working
-                        currentTime = appSettings.focuse * 60
+                        currentTime = sectionsToPauseMemory * 60
                     }
                 }
             }
@@ -148,7 +164,7 @@ struct TimerView: View {
             .background(Color.purpleDark)
             .onAppear {
                 if !timerIsActive {
-                    currentTime = appSettings.focuse * 60
+                    currentTime = focuseTimeMemory * 60
                 }
                     
             }
@@ -158,6 +174,7 @@ struct TimerView: View {
 
 struct ProgressCircle: View {
     var season: Int
+    @AppStorage("sectionsToPause") private var sectionsToPause = 4
     
     let onCircle: some View = Circle()
         .fill(Color.purpleLight)
@@ -203,7 +220,7 @@ struct ProgressCircle: View {
                 }
             HStack {
                 PositionCircle(index: 0, season: season)
-                ForEach(1..<4) { index in
+                ForEach(1..<sectionsToPause) { index in
                     Spacer()
                     PositionCircle(index: index, season: season)
                 }
@@ -215,24 +232,61 @@ struct ProgressCircle: View {
 }
 
 struct TaskInput: View {
+    private var cornerRadius: CGFloat = 36.0
+    @State private var isEditing = false
+    @FocusState private var isFocused: Bool
+    @State private var text = ""
+    
+    @AppStorage("activeTask") private var activeTask = "No task"
+    
+    
+    func save() {
+        activeTask = text
+    }
+    
     var body: some View {
-        Button {
-            print("say hi!")
-        } label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 36)
-                    .fill(Color.purpleLight)
-                    .frame(height: 72)
-                HStack {
-                    Text("Task: Write an article")
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(Color.purpleLight)
+                .frame(height: 72)
+            HStack {
+                if isEditing{
+                    TextField("Input your task", text: $text)
+                        .focused($isFocused)
+                        .foregroundColor(Color.white)
+                        .font(Font.custom("AvenirNextLTPro-Light", size: 22))
+                        .onSubmit {
+                            activeTask = text
+                            isEditing = false
+                        }
+                        .focused($isFocused, equals: true)
+                    Spacer()
+                    Button {
+                        isEditing = false
+                    } label: {
+                        Image(systemName: "x.circle")
+                            .font(.system(size: 22))
+                    }
+                } else {
+                    Text(activeTask)
                         .foregroundColor(Color.white)
                         .font(Font.custom("AvenirNextLTPro-Light", size: 22))
                     Spacer()
-                    Image(systemName: "pencil.line")
-                        .font(.system(size: 22))
-                }.foregroundColor(Color.white)
-                    .padding(.horizontal)
-            }
+                    Button {
+                        DispatchQueue.main.async { // Perform focus-related operations asynchronously
+                            isEditing = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                isFocused = true
+                            }
+                        }
+
+                    } label: {
+                        Image(systemName: "pencil.line")
+                            .font(.system(size: 22))
+                    }
+                }
+            }.foregroundColor(Color.white)
+                .padding(.horizontal, cornerRadius)
         }
     }
 }
@@ -240,6 +294,5 @@ struct TaskInput: View {
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().previewDevice("iPhone 14 Pro Max")
-            .environmentObject(AppSettings())
     }
 }
