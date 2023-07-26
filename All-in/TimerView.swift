@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-var seasonsToLongPause = 4
-
 enum ClockState: Int {
     case working = 300
     case shortPause = 5
@@ -16,19 +14,24 @@ enum ClockState: Int {
 }
 
 struct TimerView: View {
-    @State var currentEndTime = 0
-    @State var clockState: ClockState = .working {
-        didSet {
-            switch(clockState) {
-            case .working:
-                currentEndTime = focuseTimeMemory * 60
-            case .shortPause:
-                currentEndTime = shortBreakTimeMemory * 60
-            case .longPause:
-                currentEndTime = longBreakTimeMemory * 60
-            }
-        }
+    @AppStorage("focuseTime") private var focuseTimeMemory = 25
+    @AppStorage("shortBreakTime") private var shortBreakTimeMemory = 5
+    @AppStorage("longBreakTime") private var longBreakTimeMemory = 15
+    @AppStorage("sectionsToPause") private var sectionsToPauseMemory = 4
+    init() {
+        focuseTimeMemory = focuseTimeMemory == 0 ? 25 : focuseTimeMemory
+        shortBreakTimeMemory = shortBreakTimeMemory == 0 ? 5 : shortBreakTimeMemory
+        longBreakTimeMemory = longBreakTimeMemory == 0 ? 15 : longBreakTimeMemory
+        sectionsToPauseMemory = sectionsToPauseMemory == 0 ? 4 : sectionsToPauseMemory
+        
+        
+        currentEndTime = focuseTimeMemory * 60
+        currentTime = focuseTimeMemory * 60
     }
+    
+    
+    @State var currentEndTime = 1
+    @State var clockState: ClockState = .working
     @State var currentTime = 0 {
         didSet {
             withAnimation(.linear(duration: 1)) {
@@ -41,23 +44,28 @@ struct TimerView: View {
     @State var season = 0
     @State var timer: Timer?
     
-    @AppStorage("focuseTime") private var focuseTimeMemory = 25
-    @AppStorage("shortBreakTime") private var shortBreakTimeMemory = 5
-    @AppStorage("longBreakTime") private var longBreakTimeMemory = 15
-    @AppStorage("sectionsToPause") private var sectionsToPauseMemory = 4
-    
+    func defineEndTime() {
+        switch(clockState) {
+        case .working:
+            currentEndTime = focuseTimeMemory * 60
+        case .shortPause:
+            currentEndTime = shortBreakTimeMemory * 60
+        case .longPause:
+            currentEndTime = longBreakTimeMemory * 60
+        }
+    }
     
     func startTimer() {
         withAnimation {
             timerIsActive = true
-            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                self.timer = timer
+            defineEndTime()
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                 currentTime -= 1
                 if currentTime == -1 {
                     timerIsActive = false
                     timer.invalidate()
                     
-                    if clockState == .working && season < seasonsToLongPause - 1 {
+                    if clockState == .working && season < sectionsToPauseMemory - 1 {
                         clockState = .shortPause
                         currentTime = shortBreakTimeMemory * 60
                     } else if clockState == .working {
@@ -79,7 +87,6 @@ struct TimerView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
             VStack {
                 ///Header
                 Text("All-In Timer")
@@ -91,52 +98,53 @@ struct TimerView: View {
                 TaskInput()
                     .padding(.bottom, 64)
                 /// Count
-                ZStack {
-                    ///Blur circle
-                    Circle()
-//                        .trim(from: 0, to: percentProgress)
-                        .stroke(Color.purpleLight.opacity(0.05), lineWidth: 120)
-                        .frame(width: proxy.size.width - 200)
-                        .rotationEffect(.degrees(-90))
-                    Circle()
-                        .trim(from: 0, to: percentProgress)
-                        .stroke(Color.purpleLight.opacity(0.1), lineWidth: 120)
-                        .frame(width: proxy.size.width - 200)
-                        .rotationEffect(.degrees(-90))
-                        
-                    ///Middle Circle
-                    Circle()
-                        .fill(Color.purpleDark)
-                        .shadow(color: .blueMain.opacity(0.4), radius: 16)
-                        .frame(width: proxy.size.width - 160)
-                        .overlay {
-                            Text(currentTime.toTimeString())
-                                .foregroundColor(Color.white.opacity(0.8))
-                                .font(Font.custom("AvenirNextLTPro-Regular", size: 64))
-                        }
-                    /// Stroke circle
-                    Circle()
-                        .trim(from: 0, to: percentProgress)
-                        .stroke(LinearGradient(colors: [Color.blueMain, Color.purpleLight], startPoint: .leading, endPoint: .trailing), lineWidth: 10)
-                        .frame(width: proxy.size.width - 160)
-                        .rotationEffect(.degrees(-90))
-                    
-                    ///Knob circle
-                    VStack {
+                GeometryReader { proxy in
+                    ZStack {
+                        ///Blur circle
                         Circle()
-                            .fill(Color.blueMain)
-                            .frame(width: 32)
-                            .shadow(radius: 12)
+                            .trim(from: 0, to: percentProgress)
+                            .stroke(Color.purpleLight.opacity(0.05), lineWidth: 120)
+                            .frame(width: proxy.size.width - 200)
+                            .rotationEffect(.degrees(-90))
+                        Circle()
+                            .trim(from: 0, to: percentProgress)
+                            .stroke(Color.purpleLight.opacity(0.1), lineWidth: 120)
+                            .frame(width: proxy.size.width - 200)
+                            .rotationEffect(.degrees(-90))
+                        
+                        ///Middle Circle
+                        Circle()
+                            .fill(Color.purpleDark)
+                            .shadow(color: .blueMain.opacity(0.4), radius: 16)
+                            .frame(width: proxy.size.width - 160)
                             .overlay {
-                                Circle()
-                                    .fill(Color.white)
-                                    .padding(6)
+                                Text(currentTime.toTimeString())
+                                    .foregroundColor(Color.white.opacity(0.8))
+                                    .font(Font.custom("AvenirNextLTPro-Regular", size: 64))
                             }
-                            .offset(y: -(proxy.size.width - 160) / 2)
-                        }
-                        .frame(width: proxy.size.width - 100, height: proxy.size.width - 100)
-                    .rotationEffect(.degrees(percentProgress * 360))
-
+                        /// Stroke circle
+                        Circle()
+                            .trim(from: 0, to: percentProgress)
+                            .stroke(LinearGradient(colors: [Color.blueMain, Color.purpleLight], startPoint: .leading, endPoint: .trailing), lineWidth: 10)
+                            .frame(width: proxy.size.width - 160)
+                            .rotationEffect(.degrees(-90))
+                        
+                        ///Knob circle
+                        VStack {
+                            Circle()
+                                .fill(Color.blueMain)
+                                .frame(width: 32)
+                                .shadow(radius: 12)
+                                .overlay {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .padding(6)
+                                }
+                                .offset(y: -(proxy.size.width - 160) / 2)
+                            }
+                            .frame(width: proxy.size.width - 100, height: proxy.size.width - 100)
+                            .rotationEffect(.degrees(percentProgress * 360))
+                    }.frame(minWidth: 0, maxWidth: .infinity)
                 }
                 .padding(.bottom, 48)
                 
@@ -147,16 +155,12 @@ struct TimerView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .fill(Color.blueMain.opacity(0.3))
-                            .blur(radius: 12)
-                        Circle()
                             .fill(Color.blueMain)
                             .frame(width: 80)
                         Image(systemName: timerIsActive ? "pause" : "play")
                             .font(.system(size: 24))
                             .foregroundColor(.white)
                     }
-                        
                 }
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
@@ -168,7 +172,6 @@ struct TimerView: View {
                 }
                     
             }
-        }
     }
 }
 
@@ -293,6 +296,6 @@ struct TaskInput: View {
 
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().previewDevice("iPhone 14 Pro Max")
+        ContentView().previewDevice("iPhone 12")
     }
 }
